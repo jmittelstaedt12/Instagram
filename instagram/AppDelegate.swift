@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Parse.initialize(
+            with: ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
+                configuration.applicationId = "instagram"
+                configuration.clientKey = "asjfdasdjkfh"
+                configuration.server = "https://serene-fjord-86008.herokuapp.com/parse"
+            })
+        )
+        
+        if PFUser.current() != nil{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            //let initialTabBar = UITabBarController() as! MainTabBarController
+            let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController")
+            self.window?.rootViewController = initialViewController
+            self.window?.makeKeyAndVisible()
+        }
         return true
     }
 

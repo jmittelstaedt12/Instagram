@@ -1,0 +1,27 @@
+//
+//  HomeTableViewCell.swift
+//  instagram
+//
+//  Created by Jacob Mittelstaedt on 3/9/17.
+//  Copyright © 2017 Jacob Mittelstaedt. All rights reserved.
+//
+
+import UIKit
+import Parse
+class HomeTableViewCell: UITableViewCell {
+
+    @IBOutlet weak var postCaptionLabel: UILabel!
+    @IBOutlet weak var postImageView: UIImageView!
+    var postForCell: PFObject!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}
