@@ -29,8 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             //let initialTabBar = UITabBarController() as! MainTabBarController
             let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController")
+            //initialViewController.performSegue(withIdentifier: "loginSegue", sender: nil)
             self.window?.rootViewController = initialViewController
             self.window?.makeKeyAndVisible()
+            //initialViewController.performSegue(withIdentifier: "loginSegue", sender: nil)
         }
         return true
     }

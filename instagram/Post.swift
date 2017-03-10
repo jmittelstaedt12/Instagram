@@ -11,8 +11,7 @@ import Parse
 
 class Post: NSObject {
     
-    var postedImage: UIImage?
-    var postedCaption: String?
+    //var author = PFUser.current()
 
     class func postUserImage(image: UIImage?, withCaption caption: String?, withCompletion completion: PFBooleanResultBlock?) {
         // Create Parse object PFObject

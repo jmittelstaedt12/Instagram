@@ -7,10 +7,11 @@
 //
 
 import UIKit
-
+import Parse
 class ProfileViewController: UIViewController {
 
     @IBAction func onLogout(_ sender: UIButton) {
+        PFUser.logOut()
         dismiss(animated: true, completion: nil)
         performSegue(withIdentifier: "logoutSegue", sender: nil)
     }
