@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.initialize(
             with: ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
                 configuration.applicationId = "instagram"
-                configuration.clientKey = "asjfdasdjkfh"
+                configuration.clientKey = "diffkey"
                 configuration.server = "https://serene-fjord-86008.herokuapp.com/parse"
             })
         )

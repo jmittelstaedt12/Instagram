@@ -11,9 +11,10 @@ import UIKit
 class CaptureViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    
+    @IBOutlet weak var captureImageView: UIImageView!
+    @IBOutlet weak var captionField: UITextField!
     @IBAction func onSave(_ sender: UIBarButtonItem) {
-        Post.postUserImage(image: captureImageView.image, withCaption: captionField.text) { (success: Bool, error: Error?) in
+        Post.postUserImage(image: resize(image: captureImageView.image!, newSize: CGSize(width:240,height:240)), withCaption: captionField.text) { (success: Bool, error: Error?) in
             if success {
                 print("post succeeded")
                 
@@ -22,18 +23,13 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
             }
         }
     }
-    @IBOutlet weak var captionField: UITextField!
     @IBAction func onCreate(_ sender: UIButton) {
         createImagePicker()
         
     }
-    @IBOutlet weak var captureImageView: UIImageView!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,8 +56,17 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
         dismiss(animated: true, completion: nil)
     }
     
-    
-    
+    func resize(image: UIImage, newSize: CGSize) -> UIImage {
+        let resizeImageView = UIImageView(frame: CGRect(x:0, y:0, width:newSize.width, height:newSize.height))
+        resizeImageView.contentMode = UIViewContentMode.scaleAspectFill
+        resizeImageView.image = image
+        
+        UIGraphicsBeginImageContext(resizeImageView.frame.size)
+        resizeImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
     
 
     /*

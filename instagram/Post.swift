@@ -24,6 +24,7 @@ class Post: NSObject {
         post["commentsCount"] = 0
         
         post.saveInBackground(block: completion)
+        
     }
     
     class func getPFFileFromImage(image: UIImage?) -> PFFile? {
