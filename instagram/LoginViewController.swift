@@ -14,12 +14,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        PFUser.logOut()
-        // Do any additional setup after loading the view.
-    }
     @IBAction func signInButton(_ sender: UIButton) {
         PFUser.logOut()
         PFUser.logInWithUsername(inBackground: usernameField.text!, password: passwordField.text!) { (user: PFUser?, error: Error?) in
@@ -31,14 +25,16 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
     @IBAction func signUpButton(_ sender: UIButton) {
         PFUser.logOut()
         self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        PFUser.logOut()
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
