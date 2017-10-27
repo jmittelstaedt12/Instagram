@@ -11,6 +11,8 @@ The following **required** functionality is completed:
 - [X] The current signed in user is persisted across app restarts
 - [X] User can take a photo, add a caption, and post it to "Instagram"
 - [X] User can view the last 20 posts submitted to "Instagram"
+- [X] User can add a Bio and Profile picture when signing up
+- [X] Profile page displays profile picture, name, bio, and collection view of posts
 
 ## Video Walkthrough 
 
