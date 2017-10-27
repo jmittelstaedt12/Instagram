@@ -10,6 +10,12 @@ import UIKit
 import Parse
 class ProfileViewController: UIViewController {
 
+    @IBOutlet weak var profileImageView: UIImageView!
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var bioLabel: UILabel!
+    
     @IBAction func onLogout(_ sender: UIButton) {
         PFUser.logOut()
         dismiss(animated: true, completion: nil)
@@ -17,8 +23,9 @@ class ProfileViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let user = PFUser.current()
+        nameLabel.text = user?.username
     }
 
     override func didReceiveMemoryWarning() {

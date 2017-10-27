@@ -10,22 +10,31 @@ import UIKit
 
 class CaptureViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
+
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var captureImageView: UIImageView!
     @IBOutlet weak var captionField: UITextField!
+    @IBOutlet weak var createButton: UIButton!
+    
+    @IBAction func onCreate(_ sender: UIButton) {
+        createImagePicker()
+    }
     @IBAction func onSave(_ sender: UIBarButtonItem) {
         Post.postUserImage(image: resize(image: captureImageView.image!, newSize: CGSize(width:240,height:240)), withCaption: captionField.text) { (success: Bool, error: Error?) in
             if success {
                 print("post succeeded")
-                
+                self.tabBarController?.selectedIndex = 0
+                let navVC = self.tabBarController?.selectedViewController as! UINavigationController
+                let homeVC = navVC.viewControllers.first as! HomeViewController
+                homeVC.performQuery()
+                self.captureImageView.image = nil
+                self.createButton.isHidden = false
+                self.saveButton.isEnabled = false
+                self.captionField.text = nil
             } else{
                 print(error?.localizedDescription)
             }
         }
-    }
-    @IBAction func onCreate(_ sender: UIButton) {
-        createImagePicker()
-        
     }
     
     override func viewDidLoad() {
@@ -53,6 +62,7 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         captureImageView.image = image
         saveButton.isEnabled = true
+        createButton.isHidden = true
         dismiss(animated: true, completion: nil)
     }
     

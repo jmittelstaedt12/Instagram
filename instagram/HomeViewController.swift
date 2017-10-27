@@ -25,7 +25,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
         
-        
+        performQuery()
+    }
+    
+    func performQuery(){
         let query = PFQuery(className: "Post")
         query.order(byDescending: "createdAt")
         query.whereKey("author", equalTo: PFUser.current())
@@ -75,7 +78,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return postsArray.count ?? 0
+        return postsArray.count
     }
     
 
