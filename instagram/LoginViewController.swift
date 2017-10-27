@@ -33,18 +33,7 @@ class LoginViewController: UIViewController {
     }
     @IBAction func signUpButton(_ sender: UIButton) {
         PFUser.logOut()
-        let newUser = PFUser()
-        newUser.username = usernameField.text
-        newUser.password = passwordField.text
-        newUser.signUpInBackground { (success: Bool,error: Error?) in
-            if success {
-                print("succesfully created new user")
-                self.performSegue(withIdentifier: "loginSegue", sender: nil)
-
-            }else{
-               print(error?.localizedDescription)
-            }
-        }
+        self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
     
     override func didReceiveMemoryWarning() {

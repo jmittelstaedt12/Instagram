@@ -17,22 +17,25 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
     @IBOutlet weak var createButton: UIButton!
     
     @IBAction func onCreate(_ sender: UIButton) {
-        createImagePicker()
+        let imagePicker = PhotoPick.createImagePicker()
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
     }
     @IBAction func onSave(_ sender: UIBarButtonItem) {
-        Post.postUserImage(image: resize(image: captureImageView.image!, newSize: CGSize(width:240,height:240)), withCaption: captionField.text) { (success: Bool, error: Error?) in
+        Post.postUserImage(image: PhotoPick.resize(image: captureImageView.image!, newSize: CGSize(width:240,height:240)), withCaption: captionField.text) { (success: Bool, error: Error?) in
             if success {
                 print("post succeeded")
-                self.tabBarController?.selectedIndex = 0
-                let navVC = self.tabBarController?.selectedViewController as! UINavigationController
+                let navVC = self.tabBarController?.viewControllers![0] as! UINavigationController
                 let homeVC = navVC.viewControllers.first as! HomeViewController
                 homeVC.performQuery()
+                homeVC.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition(rawValue: 0)!, animated: false)
+                self.tabBarController?.selectedIndex = 0
                 self.captureImageView.image = nil
                 self.createButton.isHidden = false
                 self.saveButton.isEnabled = false
                 self.captionField.text = nil
             } else{
-                print(error?.localizedDescription)
+                print(error?.localizedDescription ?? "")
             }
         }
     }
@@ -46,18 +49,6 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
         // Dispose of any resources that can be recreated.
     }
     
-    func createImagePicker(){
-        let imagePicker = UIImagePickerController()
-        
-        if UIImagePickerController.isSourceTypeAvailable(.camera){
-            imagePicker.sourceType = .camera
-        }else{
-            imagePicker.sourceType = .photoLibrary
-        }
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         captureImageView.image = image
@@ -65,28 +56,5 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
         createButton.isHidden = true
         dismiss(animated: true, completion: nil)
     }
-    
-    func resize(image: UIImage, newSize: CGSize) -> UIImage {
-        let resizeImageView = UIImageView(frame: CGRect(x:0, y:0, width:newSize.width, height:newSize.height))
-        resizeImageView.contentMode = UIViewContentMode.scaleAspectFill
-        resizeImageView.image = image
-        
-        UIGraphicsBeginImageContext(resizeImageView.frame.size)
-        resizeImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

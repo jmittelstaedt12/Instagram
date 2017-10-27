@@ -38,9 +38,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let objects = objects{
                 self.postsArray = objects
                 self.tableView.reloadData()
-                
-                
             } else{
+                
                 print(error?.localizedDescription)
             }
         }

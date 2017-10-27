@@ -26,6 +26,15 @@ class ProfileViewController: UIViewController {
         
         let user = PFUser.current()
         nameLabel.text = user?.username
+        if let userPicture = user?.value(forKey: "profilePicture") as? PFFile{
+            userPicture.getDataInBackground(block: { (imageData: Data?,error: Error?) in
+                if error == nil{
+                    self.profileImageView.image = UIImage(data: imageData!)
+                }else{
+                    print(error?.localizedDescription ?? "")
+                }
+            })
+        }
     }
 
     override func didReceiveMemoryWarning() {
