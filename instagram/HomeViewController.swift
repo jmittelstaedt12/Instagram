@@ -8,26 +8,38 @@
 
 import UIKit
 import Parse
+import MBProgressHUD
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
-    static var postsArray = [PFObject]()
     
+    static var postsArray = [PFObject]()
+    static var Image:UIImage? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
         performQuery()
-        let navVC = self.tabBarController?.viewControllers![2] as! UINavigationController
-        let homeVC = navVC.viewControllers.first as! ProfileViewController
-        //homeVC.userPostsArray = postsArray
+        
+        if let image = (PFUser.current())?.value(forKey: "profilePicture") as? PFFile{
+            image.getDataInBackground(block: { (imageData: Data?,error: Error?) in
+                if error == nil{
+                    HomeViewController.Image = UIImage(data: imageData!)
+                }else{
+                    print(error?.localizedDescription ?? "")
+                }
+            })
+        }
     }
     
     func performQuery(){
@@ -35,14 +47,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         query.order(byDescending: "createdAt")
         query.whereKey("author", equalTo: PFUser.current())
         query.limit = 20
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         query.findObjectsInBackground { (objects: [PFObject]?, error: Error?) -> Void in
-            
+            MBProgressHUD.hide(for: self.view, animated: true)
             if let objects = objects{
                 HomeViewController.postsArray = objects
                 self.tableView.reloadData()
-//                let navVC = self.tabBarController?.viewControllers![2] as! UINavigationController
-//                let profileVC = navVC.viewControllers.first as! ProfileViewController
-//                profileVC.collectionView.reloadData()
             } else{
                 print(error?.localizedDescription)
             }
@@ -65,6 +75,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             })
         }
+        cell.profileImageView.image = HomeViewController.Image
+        cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.height/2
+        cell.profileImageView.clipsToBounds = true
+        cell.userLabel.text = PFUser.current()?.username
         cell.postCaptionLabel.text = cell.postForCell.value(forKey: "caption") as? String
         return cell
     }

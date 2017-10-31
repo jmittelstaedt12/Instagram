@@ -16,8 +16,12 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBOutlet weak var passwordText: UITextField!
     @IBOutlet weak var bioText: UITextView!
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var photoLabel: UILabel!
     
     
+    @IBAction func onCancel(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
     @IBAction func onImageTap(_ sender: UITapGestureRecognizer) {
         let imagePicker = PhotoPick.createImagePicker()
         imagePicker.delegate = self
@@ -46,7 +50,10 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        profileImageView.layer.cornerRadius = profileImageView.frame.height/2
+        profileImageView.clipsToBounds = true
+        photoLabel.layer.cornerRadius = photoLabel.frame.height/2
+        photoLabel.clipsToBounds = true
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -55,15 +62,5 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate, UI
         registerButton.isEnabled = true
         dismiss(animated: true, completion: nil)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

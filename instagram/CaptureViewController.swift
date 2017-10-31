@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class CaptureViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
@@ -14,17 +15,16 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var captureImageView: UIImageView!
     @IBOutlet weak var captionField: UITextField!
-    
-    @IBAction func onCreate(_ sender: UIButton) {
+    @IBAction func onTap(_ sender: UITapGestureRecognizer) {
         let imagePicker = PhotoPick.createImagePicker()
         imagePicker.delegate = self
         present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func onSave(_ sender: UIBarButtonItem) {
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         Post.postUserImage(image: PhotoPick.resize(image: captureImageView.image!, newSize: CGSize(width:240,height:240)), withCaption: captionField.text) { (success: Bool, error: Error?) in
             if success {
-                print("post succeeded")
                 self.captureImageView.image = nil
                 self.saveButton.isEnabled = false
                 self.captionField.text = nil
@@ -34,6 +34,7 @@ class CaptureViewController: UIViewController, UINavigationControllerDelegate, U
                 homeVC.performQuery()
                 homeVC.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition(rawValue: 0)!, animated: false)
             } else{
+                MBProgressHUD.hide(for: self.view, animated: true)
                 print(error?.localizedDescription ?? "")
             }
         }

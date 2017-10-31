@@ -8,6 +8,7 @@
 
 import UIKit
 import Parse
+import MBProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -16,12 +17,16 @@ class LoginViewController: UIViewController {
     
     @IBAction func signInButton(_ sender: UIButton) {
         PFUser.logOut()
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         PFUser.logInWithUsername(inBackground: usernameField.text!, password: passwordField.text!) { (user: PFUser?, error: Error?) in
+            MBProgressHUD.hide(for: self.view, animated: true)
             if user != nil{
                 print("successful login")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             } else{
-                print(error?.localizedDescription)
+                let alert = UIAlertController(title: "Failed Login", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -36,13 +41,4 @@ class LoginViewController: UIViewController {
         
         PFUser.logOut()
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if(segue.identifier == "loginSegue") {
-//            let user = PFUser.current()
-//            let navVC = segue.destination as? UITabBarController
-//            let detailedVC = navVC?.viewControllers?.first as! ProfileViewController
-//            detailedVC.nameLabel.text = user?.username
-//        }
-//    }
 }

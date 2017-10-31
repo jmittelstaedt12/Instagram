@@ -12,6 +12,9 @@ class HomeTableViewCell: UITableViewCell {
 
     @IBOutlet weak var postCaptionLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var userLabel: UILabel!
+    
     var postForCell: PFObject!
 
     override func setSelected(_ selected: Bool, animated: Bool) {

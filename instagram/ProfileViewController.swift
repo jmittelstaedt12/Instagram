@@ -8,7 +8,7 @@
 
 import UIKit
 import Parse
-class ProfileViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate{
+class ProfileViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
 
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -16,7 +16,6 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource, UICol
     @IBOutlet weak var collectionView: UICollectionView!
     
     var userPostsArray = [PFObject]()
-
     @IBAction func onLogout(_ sender: UIButton) {
         PFUser.logOut()
         dismiss(animated: true, completion: nil)
@@ -32,15 +31,9 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource, UICol
         nameLabel.text = user?.username
         bioLabel.text = user?.value(forKey: "bio") as? String
         userPostsArray = HomeViewController.postsArray
-        if let userPicture = user?.value(forKey: "profilePicture") as? PFFile{
-            userPicture.getDataInBackground(block: { (imageData: Data?,error: Error?) in
-                if error == nil{
-                    self.profileImageView.image = UIImage(data: imageData!)
-                }else{
-                    print(error?.localizedDescription ?? "")
-                }
-            })
-        }
+        profileImageView.image = HomeViewController.Image
+        profileImageView.layer.cornerRadius = profileImageView.frame.height/2
+        profileImageView.clipsToBounds = true
         collectionView.reloadData()
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -54,7 +47,8 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource, UICol
         if let postPFFile = cell.postForCell.value(forKey: "media") as? PFFile {
             postPFFile.getDataInBackground(block: { (imageData: Data?, error: Error?) -> Void in
                 if error == nil {
-                    cell.cellImageView.image = PhotoPick.resize(image: UIImage(data: imageData!)!, newSize: CGSize(width: 61, height: 61))
+                    let imageSize = round((collectionView.contentSize.width - 9)/3)
+                    cell.cellImageView.image = PhotoPick.resize(image: UIImage(data: imageData!)!, newSize: CGSize(width: imageSize, height: imageSize))
                 }
             })
         }
@@ -64,8 +58,9 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return userPostsArray.count
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 0, height: 0)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
+        let imageSize = round((collectionView.contentSize.width - 9)/3)
+        return CGSize(width: imageSize, height: imageSize);
     }
 
 }
