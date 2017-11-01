@@ -18,6 +18,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     static var postsArray = [PFObject]()
     static var Image:UIImage? = nil
 
+    @IBAction func onTap(_ sender: UITapGestureRecognizer) {
+        self.tabBarController?.selectedIndex = 2
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -36,7 +36,8 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource, UICol
         profileImageView.clipsToBounds = true
         collectionView.reloadData()
     }
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         userPostsArray = HomeViewController.postsArray
         collectionView.reloadData()
     }
