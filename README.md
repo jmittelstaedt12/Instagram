@@ -2,9 +2,9 @@
 
 **Instagram** is a photo sharing app using Parse as its backend.
 
-## User Stories
+## Features
 
-The following **required** functionality is completed:
+The following functionality is completed:
 
 - [X] User can sign up to create a new account using Parse authentication
 - [X] User can log in and log out of his or her account
